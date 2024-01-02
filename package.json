@@ -1,0 +1,35 @@
+{
+  "name": "react-dynamic-form",
+  "version": "1.0.0",
+  "description": "Build react dynamic forms using JSON format",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/esm/index.d.ts",
+  "scripts": {
+    "build": "yarn build:esm && yarn build:cjs",
+    "build:esm": "tsc",
+    "build:cjs": "tsc --module CommonJS --outDir dist/cjs"
+  },
+  "keywords": [
+    "form",
+    "react form",
+    "form builder",
+    "typescript"
+  ],
+  "author": "insoutt <elvis@betaksur.com>",
+  "license": "MIT",
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-hook-form": "^7.49.2"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.46",
+    "typescript": "^5.3.3"
+  },
+  "peerDependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-hook-form": "^7.49.2"
+  }
+}
