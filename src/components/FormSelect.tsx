@@ -1,9 +1,12 @@
 import { useFormContext, FieldValues } from "react-hook-form"
 import { cn } from '../utils/utils';
 import { SelectProps } from "../utils/types";
+import { useContext } from "react";
+import { SimpleFormContext } from "../contexts/simple-form-context";
 
 const FormSelect = <T extends FieldValues>({ label, name, options, validation, props, labelClassName, groupClassName, className, renderFields }: SelectProps<T>): JSX.Element => {
     const { register, watch } = useFormContext();
+    const {isLoading} = useContext(SimpleFormContext);
     const selectedValue = watch(name);
     const validate = typeof validation !== 'string' ? validation : undefined;
 
@@ -19,10 +22,15 @@ const FormSelect = <T extends FieldValues>({ label, name, options, validation, p
     return <>
         <div className={cn(groupClassName || 'form-group')}>
             <label className={labelClassName || 'form-label'} htmlFor={name}>{label}</label>
-            <select id={name} {...register(name, {required: {
-                value: true,
-                message: 'Obligatorio'
-            }, validate})} className={cn(className || 'form-control')} {...props}>
+            <select id={name} 
+                disabled={isLoading} 
+                className={cn(className || 'form-control')} 
+                {...register(name, {required: {
+                    value: true,
+                    message: 'Obligatorio'
+                }, validate})} 
+                {...props}
+            >
                 <option value="">N/A</option>
                 {options.map(option => <option key={option.value} value={option.value}>{option.text}</option>)}
             </select>

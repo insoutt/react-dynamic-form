@@ -1,10 +1,12 @@
 import { FieldValues, Path } from "react-hook-form";
 
 // Form
+export type Validator = Record<string, FieldValidator>;
 export interface FormProps<T extends FieldValues> {
     fields: FieldProps<T>[];
+    isLoading?: boolean;
     classNames?: FormClassNames;
-    validator?: Record<string, FieldValidator> 
+    validator?: Validator 
     submitButton?: (submit: () => void) => React.ReactNode
     clearButton?: (reset: () => void) => React.ReactNode
     onSubmit?: (values: T) => void

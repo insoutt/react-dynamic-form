@@ -2,9 +2,16 @@ import { useForm, SubmitHandler, FormProvider, FieldValues } from "react-hook-fo
 import FormField from "./FormField";
 import { FormProps } from '../utils/types';
 import { cn } from '../utils/utils';
+import { SimpleFormContext } from "../contexts/simple-form-context";
+import { useEffect, useState } from "react";
 
-const Form = <T extends FieldValues>({fields, validator, classNames, clearButton, submitButton, onSubmit, onClear}: FormProps<T>) => {
+const Form = <T extends FieldValues>({fields, validator, classNames, clearButton, submitButton, isLoading, onSubmit, onClear}: FormProps<T>) => {
     const methods = useForm<T>();
+    const [isLoadingForm, setIsLoadingForm] = useState(false);
+
+    useEffect(() => {
+        setIsLoadingForm(!!isLoading);
+    }, [isLoading]);
     
     const formValues = methods.watch();
 
@@ -24,7 +31,11 @@ const Form = <T extends FieldValues>({fields, validator, classNames, clearButton
     }
 
     return (
-        <FormProvider {...methods}>
+        <SimpleFormContext.Provider value={{
+            isLoading: isLoadingForm,
+            validator,
+        }}>
+            <FormProvider {...methods}>
             <form onSubmit={methods.handleSubmit(formSubmit)}>
                 {fields.map(field => (
                     <FormField<T> key={field.name} {...field} validator={validator}/>
@@ -39,6 +50,7 @@ const Form = <T extends FieldValues>({fields, validator, classNames, clearButton
                 </div>
             </form>
         </FormProvider>
+        </SimpleFormContext.Provider>
     )
 }
  
