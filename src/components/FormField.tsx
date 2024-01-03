@@ -50,8 +50,8 @@ const FormField = <T extends FieldValues>(props: FieldProps<T>): JSX.Element => 
 
     return (<>
         {renderField()}
-        {getErrorMessage() !== null && <p role="alert">{getErrorMessage()}</p>}
-        {props.helpText && <span className="help-text">{props.helpText}</span>}
+        {getErrorMessage() !== null && <p role="alert" className="form-error">{getErrorMessage()}</p>}
+        {props.helpText && <span className="form-help-text">{props.helpText}</span>}
     </>)
 };
   
