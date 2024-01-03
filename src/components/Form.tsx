@@ -3,7 +3,7 @@ import FormField from "./FormField";
 import { FormProps } from '../utils/types';
 import { cn } from '../utils/utils';
 
-const Form = <T extends FieldValues>({fields, classNames, resetButton, submitButton, onSubmit}: FormProps<T>) => {
+const Form = <T extends FieldValues>({fields, validator, classNames, resetButton, submitButton, onSubmit}: FormProps<T>) => {
     const methods = useForm<T>();
     
     const formSubmit: SubmitHandler<T> = (values: T) => {
@@ -16,7 +16,7 @@ const Form = <T extends FieldValues>({fields, classNames, resetButton, submitBut
         <FormProvider {...methods}>
             <form onSubmit={methods.handleSubmit(formSubmit)}>
                 {fields.map(field => (
-                    <FormField<T> key={field.name} {...field}/>
+                    <FormField<T> key={field.name} {...field} validator={validator}/>
                 ))}
                 <div className="buttons-group">
                     {resetButton ? resetButton(methods.reset)  : <button className={cn(classNames.clearButton)} onClick={() => methods.reset()}>

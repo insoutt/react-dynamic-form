@@ -5,6 +5,8 @@ import { SelectProps } from "../utils/types";
 const FormSelect = <T extends FieldValues>({ label, name, options, validation, props, labelClassName, groupClassName, className, renderFields }: SelectProps<T>): JSX.Element => {
     const { register, watch } = useFormContext();
     const selectedValue = watch(name);
+    const validate = typeof validation !== 'string' ? validation : undefined;
+
 
     const renderInputs = () => {
         const option = options.find(item => item.value === selectedValue);
@@ -20,7 +22,7 @@ const FormSelect = <T extends FieldValues>({ label, name, options, validation, p
             <select id={name} {...register(name, {required: {
                 value: true,
                 message: 'Obligatorio'
-            }, validate: validation})} className={cn(className || 'form-control')} {...props}>
+            }, validate})} className={cn(className || 'form-control')} {...props}>
                 <option value="">N/A</option>
                 {options.map(option => <option key={option.value} value={option.value}>{option.text}</option>)}
             </select>

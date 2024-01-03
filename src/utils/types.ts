@@ -4,14 +4,11 @@ import { FieldValues, Path } from "react-hook-form";
 export interface FormProps<T extends FieldValues> {
     fields: FieldProps<T>[];
     classNames: FormClassNames;
+    validator?: Record<string, FieldValidator> 
     submitButton?: (submit: () => void) => React.ReactNode
     resetButton?: (reset: () => void) => React.ReactNode
     onSubmit?: (values: T) => void
 }
-
-type FormBaseFieldProps = {
-    classNames?: FormClassNames;
-};
 
 interface FormClassNames{
     select?: string
@@ -22,10 +19,16 @@ interface FormClassNames{
     submitButton?: string
     clearButton?: string
 }
+
+type FormBaseFieldProps = {
+    classNames?: FormClassNames;
+    validator?: Record<string, FieldValidator> 
+};
 // End Form
 
 // FormField
 export type FieldValidator = (value: string | number) => boolean | string | Promise<boolean | string>;
+
 interface FieldBaseAttributes<T extends FieldValues> {
     label?: string;
     helpText?: string;
@@ -34,7 +37,7 @@ interface FieldBaseAttributes<T extends FieldValues> {
     className?: string;
     groupClassName?: string;
     labelClassName?: string;
-    validation?: FieldValidator
+    validation?: string | FieldValidator
 }
 
 interface FieldBaseProps {

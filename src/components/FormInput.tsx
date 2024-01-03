@@ -5,7 +5,7 @@ import { InputProps } from "../utils/types";
 
 const FormInput = <T extends FieldValues>({ label, name, type, helpText, className, validation, props, groupClassName, labelClassName }: InputProps<T>): JSX.Element => {
     const { register } = useFormContext();
-    const validate = validation;
+    const validate = typeof validation !== 'string' ? validation : undefined;
 
     return <div className={cn(groupClassName || 'form-group')}>
         {label && <label className={labelClassName || 'form-label'} htmlFor={name}>{label}</label>}
