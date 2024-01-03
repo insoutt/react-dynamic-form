@@ -3,7 +3,7 @@ import FormSelect from "./FormSelect";
 import { FieldValues, useFormContext } from "react-hook-form"
 import { useEffect } from "react";
 import { cn } from "../utils/utils";
-import { FieldProps, FieldValidator } from "../utils/types";
+import { FieldProps } from "../utils/types";
 
 const FormField = <T extends FieldValues>(props: FieldProps<T>): JSX.Element => {
 
@@ -16,23 +16,6 @@ const FormField = <T extends FieldValues>(props: FieldProps<T>): JSX.Element => 
         }
     }, []);
 
-
-    const parseValidation = (): FieldValidator | undefined => {
-        if(typeof props.validation === 'function') {
-            return props.validation;
-        }
-        if(typeof props.validator !== 'object' || props.validator === null) {
-            return;
-        }
-        if(typeof props.validation === 'string') {
-            if(typeof props.validator[props.validation] === 'undefined') {
-                throw new Error(`Validation '${props.validation}' does not exists in form validator object`)
-            }
-
-            return props.validator[props.validation];
-        }
-    }
-
     const renderField = () => {
         switch (props.type) {
             case 'select':
@@ -40,18 +23,18 @@ const FormField = <T extends FieldValues>(props: FieldProps<T>): JSX.Element => 
                     <FormSelect<T> 
                         {...props}
                         options={props.options}
-                        validation={parseValidation()}
+                        validation={props.validation}
                         className={cn(props.classNames?.input || props.classNames?.field)} 
                         groupClassName={cn(props.classNames?.group)}
                         labelClassName={cn(props.classNames?.label)}
-                        renderFields={(fieldProps) => <FormField<T> key={fieldProps.name} {...fieldProps} validator={props.validator}/>}
+                        renderFields={(fieldProps) => <FormField<T> key={fieldProps.name} {...fieldProps}/>}
                     />
                 );
             default:
                 return (
                     <FormInput<T> 
                         {...props} 
-                        validation={parseValidation()}
+                        validation={props.validation}
                         className={cn(props.classNames?.input || props.classNames?.field)} 
                         groupClassName={cn(props.classNames?.group)}
                         labelClassName={cn(props.classNames?.label)}

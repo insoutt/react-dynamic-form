@@ -1,14 +1,14 @@
 import { useFormContext, FieldValues } from "react-hook-form"
-import { cn } from '../utils/utils';
+import { cn, parseValidation } from '../utils/utils';
 import { SelectProps } from "../utils/types";
 import { useContext } from "react";
 import { SimpleFormContext } from "../contexts/simple-form-context";
 
 const FormSelect = <T extends FieldValues>({ label, name, options, validation, props, labelClassName, groupClassName, className, renderFields }: SelectProps<T>): JSX.Element => {
     const { register, watch } = useFormContext();
-    const {isLoading} = useContext(SimpleFormContext);
+    const {isLoading, validator} = useContext(SimpleFormContext);
     const selectedValue = watch(name);
-    const validate = typeof validation !== 'string' ? validation : undefined;
+    const validate = parseValidation(validation, validator);
 
 
     const renderInputs = () => {

@@ -38,7 +38,7 @@ const Form = <T extends FieldValues>({fields, validator, classNames, clearButton
             <FormProvider {...methods}>
             <form onSubmit={methods.handleSubmit(formSubmit)}>
                 {fields.map(field => (
-                    <FormField<T> key={field.name} {...field} validator={validator}/>
+                    <FormField<T> key={field.name} {...field}/>
                 ))}
                 <div className="form-action-buttons">
                     {!isFormClear() && <>{clearButton ? clearButton(clear)  : <button className={cn(classNames?.clearButton)} onClick={() => clear()}>

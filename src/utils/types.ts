@@ -25,7 +25,6 @@ interface FormClassNames{
 
 type FormBaseFieldProps = {
     classNames?: FormClassNames;
-    validator?: Record<string, FieldValidator> 
 };
 // End Form
 
