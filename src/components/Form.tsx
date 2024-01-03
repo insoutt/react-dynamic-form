@@ -3,7 +3,7 @@ import FormField from "./FormField";
 import { FormProps } from '../utils/types';
 import { cn } from '../utils/utils';
 
-const Form = <T extends FieldValues>({fields, validator, classNames, resetButton, submitButton, onSubmit, onClear}: FormProps<T>) => {
+const Form = <T extends FieldValues>({fields, validator, classNames, clearButton, submitButton, onSubmit, onClear}: FormProps<T>) => {
     const methods = useForm<T>();
     
     const formValues = methods.watch();
@@ -29,8 +29,8 @@ const Form = <T extends FieldValues>({fields, validator, classNames, resetButton
                 {fields.map(field => (
                     <FormField<T> key={field.name} {...field} validator={validator}/>
                 ))}
-                <div className="buttons-group">
-                    {!isFormClear() && <>{resetButton ? resetButton(clear)  : <button className={cn(classNames.clearButton)} onClick={() => clear()}>
+                <div className="form-action-buttons">
+                    {!isFormClear() && <>{clearButton ? clearButton(clear)  : <button className={cn(classNames.clearButton)} onClick={() => clear()}>
                         Clear
                     </button>}</>}
                     {submitButton ? submitButton(methods.handleSubmit(formSubmit))  : <button className={cn(classNames.submitButton)} type="submit">

@@ -6,7 +6,7 @@ export interface FormProps<T extends FieldValues> {
     classNames: FormClassNames;
     validator?: Record<string, FieldValidator> 
     submitButton?: (submit: () => void) => React.ReactNode
-    resetButton?: (reset: () => void) => React.ReactNode
+    clearButton?: (reset: () => void) => React.ReactNode
     onSubmit?: (values: T) => void
     onClear?: () => void
 }
