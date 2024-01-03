@@ -5,7 +5,7 @@ import { cn } from '../utils/utils';
 import { SimpleFormContext } from "../contexts/simple-form-context";
 import { useEffect, useState } from "react";
 
-const Form = <T extends FieldValues>({fields, validator, classNames, clearButton, submitButton, isLoading, onSubmit, onClear}: FormProps<T>) => {
+const Form = <T extends FieldValues>({fields, validator, className, classNames, clearButton, submitButton, isLoading, onSubmit, onClear}: FormProps<T>) => {
     const methods = useForm<T>();
     const [isLoadingForm, setIsLoadingForm] = useState(false);
 
@@ -36,7 +36,7 @@ const Form = <T extends FieldValues>({fields, validator, classNames, clearButton
             validator,
         }}>
             <FormProvider {...methods}>
-            <form onSubmit={methods.handleSubmit(formSubmit)}>
+            <form onSubmit={methods.handleSubmit(formSubmit)} className={className}>
                 {fields.map(field => (
                     <FormField<T> key={field.name} {...field}/>
                 ))}
