@@ -3,7 +3,7 @@ import { FieldValues, Path } from "react-hook-form";
 // Form
 export interface FormProps<T extends FieldValues> {
     fields: FieldProps<T>[];
-    classNames: FormClassNames;
+    classNames?: FormClassNames;
     validator?: Record<string, FieldValidator> 
     submitButton?: (submit: () => void) => React.ReactNode
     clearButton?: (reset: () => void) => React.ReactNode
