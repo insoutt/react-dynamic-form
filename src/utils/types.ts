@@ -62,7 +62,6 @@ export type SelectProps<T extends FieldValues> = {
     type: 'select';
     options: SelectOption<T>[];
     props?: FieldBaseProps;
-    // fieldProps?: FormBaseFieldProps
     renderFields?: (field: FieldProps<T>) => React.ReactNode
 } & FieldBaseAttributes<T>;
 

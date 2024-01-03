@@ -2,7 +2,6 @@ import { useFormContext, FieldValues } from "react-hook-form"
 import { cn } from '../utils/utils';
 import { SelectProps } from "../utils/types";
 
-
 const FormSelect = <T extends FieldValues>({ label, name, options, validation, props, labelClassName, groupClassName, className, renderFields }: SelectProps<T>): JSX.Element => {
     const { register, watch } = useFormContext();
     const selectedValue = watch(name);
@@ -12,9 +11,7 @@ const FormSelect = <T extends FieldValues>({ label, name, options, validation, p
 
         if(!option?.fields || typeof renderFields !== 'function') return;
 
-        return <>
-            {option.fields.map(field => renderFields(field))}
-        </>
+        return option.fields.map(field => renderFields(field));
     }
 
     return <>
@@ -28,7 +25,7 @@ const FormSelect = <T extends FieldValues>({ label, name, options, validation, p
                 {options.map(option => <option key={option.value} value={option.value}>{option.text}</option>)}
             </select>
         </div>
-
+        
         {renderInputs()}
     </>
 }
