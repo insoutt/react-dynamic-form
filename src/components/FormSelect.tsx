@@ -1,36 +1,29 @@
 import { useFormContext, FieldValues } from "react-hook-form"
-import FormField from "./FormField";
 import { cn } from '../utils/utils';
 import { SelectProps } from "../utils/types";
 
 
-const FormSelect = <T extends FieldValues>({ label, name, options, validation, props, fieldProps }: SelectProps<T>): JSX.Element => {
+const FormSelect = <T extends FieldValues>({ label, name, options, validation, props, labelClassName, groupClassName, className, renderFields }: SelectProps<T>): JSX.Element => {
     const { register, watch } = useFormContext();
     const selectedValue = watch(name);
 
     const renderInputs = () => {
         const option = options.find(item => item.value === selectedValue);
 
-        if(!option?.fields) return;
+        if(!option?.fields || typeof renderFields !== 'function') return;
 
         return <>
-            {option.fields.map(field => (
-                <FormField<T> 
-                    key={field.name} 
-                    {...field} 
-                    classNames={fieldProps?.classNames}
-                />
-            ))}
+            {option.fields.map(field => renderFields(field))}
         </>
     }
 
     return <>
-        <div className={cn(fieldProps?.classNames?.group || 'form-group')}>
-            <label className={fieldProps?.classNames?.label || 'form-label'} htmlFor={name}>{label}</label>
+        <div className={cn(groupClassName || 'form-group')}>
+            <label className={labelClassName || 'form-label'} htmlFor={name}>{label}</label>
             <select id={name} {...register(name, {required: {
                 value: true,
                 message: 'Obligatorio'
-            }, validate: validation})} className={cn(fieldProps?.classNames?.select || fieldProps?.classNames?.field || 'form-control')} {...props}>
+            }, validate: validation})} className={cn(className || 'form-control')} {...props}>
                 <option value="">N/A</option>
                 {options.map(option => <option key={option.value} value={option.value}>{option.text}</option>)}
             </select>

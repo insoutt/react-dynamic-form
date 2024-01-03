@@ -16,11 +16,7 @@ const Form = <T extends FieldValues>({fields, classNames, resetButton, submitBut
         <FormProvider {...methods}>
             <form onSubmit={methods.handleSubmit(formSubmit)}>
                 {fields.map(field => (
-                    <FormField<T> 
-                        key={field.name} 
-                        {...field} 
-                        classNames={classNames}
-                    />
+                    <FormField<T> key={field.name} {...field}/>
                 ))}
                 <div className="buttons-group">
                     {resetButton ? resetButton(methods.reset)  : <button className={cn(classNames.clearButton)} onClick={() => methods.reset()}>

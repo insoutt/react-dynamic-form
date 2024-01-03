@@ -28,6 +28,7 @@ interface FormClassNames{
 export type FieldValidator = (value: string | number) => boolean | string | Promise<boolean | string>;
 interface FieldBaseAttributes<T extends FieldValues> {
     label?: string;
+    helpText?: string;
     name: Path<T>;
     type: InputType | 'select';
     className?: string;
@@ -61,7 +62,8 @@ export type SelectProps<T extends FieldValues> = {
     type: 'select';
     options: SelectOption<T>[];
     props?: FieldBaseProps;
-    fieldProps?: FormBaseFieldProps
+    // fieldProps?: FormBaseFieldProps
+    renderFields?: (field: FieldProps<T>) => React.ReactNode
 } & FieldBaseAttributes<T>;
 
 type SelectOption<T extends FieldValues> = {

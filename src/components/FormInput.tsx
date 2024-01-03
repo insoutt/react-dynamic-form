@@ -3,7 +3,7 @@ import { cn } from "../utils/utils";
 import { InputProps } from "../utils/types";
 
 
-const FormInput = <T extends FieldValues>({ label, name, type, className, validation, props, groupClassName, labelClassName }: InputProps<T>): JSX.Element => {
+const FormInput = <T extends FieldValues>({ label, name, type, helpText, className, validation, props, groupClassName, labelClassName }: InputProps<T>): JSX.Element => {
     const { register } = useFormContext();
     const validate = validation;
 
