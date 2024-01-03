@@ -3,14 +3,25 @@ import FormField from "./FormField";
 import { FormProps } from '../utils/types';
 import { cn } from '../utils/utils';
 
-const Form = <T extends FieldValues>({fields, validator, classNames, resetButton, submitButton, onSubmit}: FormProps<T>) => {
+const Form = <T extends FieldValues>({fields, validator, classNames, resetButton, submitButton, onSubmit, onClear}: FormProps<T>) => {
     const methods = useForm<T>();
     
+    const formValues = methods.watch();
+
+    const isFormClear = () => {
+        return Object.values(formValues).every(value => !value);
+    };
+
     const formSubmit: SubmitHandler<T> = (values: T) => {
         console.log(`Submitted`);
         console.log(values);
         onSubmit?.(values);
     };
+
+    const clear = () => {
+        methods.reset();
+        onClear?.();
+    }
 
     return (
         <FormProvider {...methods}>
@@ -19,9 +30,9 @@ const Form = <T extends FieldValues>({fields, validator, classNames, resetButton
                     <FormField<T> key={field.name} {...field} validator={validator}/>
                 ))}
                 <div className="buttons-group">
-                    {resetButton ? resetButton(methods.reset)  : <button className={cn(classNames.clearButton)} onClick={() => methods.reset()}>
+                    {!isFormClear() && <>{resetButton ? resetButton(clear)  : <button className={cn(classNames.clearButton)} onClick={() => clear()}>
                         Clear
-                    </button>}
+                    </button>}</>}
                     {submitButton ? submitButton(methods.handleSubmit(formSubmit))  : <button className={cn(classNames.submitButton)} type="submit">
                         Submit
                     </button>}
