@@ -3,15 +3,9 @@ import FormField from "./FormField";
 import { FormProps } from '../utils/types';
 import { cn } from '../utils/utils';
 import { SimpleFormContext } from "../contexts/simple-form-context";
-import { useEffect, useState } from "react";
 
 const Form = <T extends FieldValues>({fields, validator, className, classNames, clearButton, submitButton, isLoading, onSubmit, onClear}: FormProps<T>) => {
     const methods = useForm<T>();
-    const [isLoadingForm, setIsLoadingForm] = useState(false);
-
-    useEffect(() => {
-        setIsLoadingForm(!!isLoading);
-    }, [isLoading]);
     
     const formValues = methods.watch();
 
@@ -32,7 +26,7 @@ const Form = <T extends FieldValues>({fields, validator, className, classNames, 
 
     return (
         <SimpleFormContext.Provider value={{
-            isLoading: isLoadingForm,
+            isLoading: !!isLoading,
             validator,
         }}>
             <FormProvider {...methods}>
@@ -41,7 +35,7 @@ const Form = <T extends FieldValues>({fields, validator, className, classNames, 
                     <FormField<T> key={field.name} {...field}/>
                 ))}
                 <div className="form-action-buttons">
-                    {!isFormClear() && <>{clearButton ? clearButton(clear)  : <button className={cn(classNames?.clearButton)} onClick={() => clear()}>
+                    {!isLoading && !isFormClear() && <>{clearButton ? clearButton(clear)  : <button className={cn(classNames?.clearButton)} onClick={clear}>
                         Clear
                     </button>}</>}
                     {submitButton ? submitButton(methods.handleSubmit(formSubmit))  : <button className={cn(classNames?.submitButton)} type="submit">
