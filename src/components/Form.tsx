@@ -35,12 +35,12 @@ const Form = <T extends FieldValues>({fields, validator, className, classNames, 
                     <FormField<T> key={field.name} {...field}/>
                 ))}
                 <div className="form-action-buttons">
-                    {!isLoading && !isFormClear() && <>{clearButton ? clearButton(clear)  : <button className={cn(classNames?.clearButton)} onClick={clear}>
-                        Clear
-                    </button>}</>}
                     {submitButton ? submitButton(methods.handleSubmit(formSubmit))  : <button className={cn(classNames?.submitButton)} type="submit">
                         Submit
                     </button>}
+                    {!isLoading && !isFormClear() && <>{clearButton ? clearButton(clear)  : <button className={cn(classNames?.clearButton)} onClick={clear}>
+                        Clear
+                    </button>}</>}
                 </div>
             </form>
         </FormProvider>
