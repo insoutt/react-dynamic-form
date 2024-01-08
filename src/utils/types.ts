@@ -10,6 +10,7 @@ export interface FormProps<T extends FieldValues> {
     validator?: Validator 
     onSubmit?: (values: T) => void
     onClear?: () => void;
+    submitText?: string
     children?: React.ReactNode | ((submit: () => void, clear: () => void) => React.ReactElement)
 }
 

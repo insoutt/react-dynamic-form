@@ -4,7 +4,7 @@ import { FormProps } from '../utils/types';
 import { cn } from '../utils/utils';
 import { SimpleFormContext } from "../contexts/simple-form-context";
 
-const Form = <T extends FieldValues>({fields, validator, className, classNames, isLoading, onSubmit, onClear, children}: FormProps<T>) => {
+const Form = <T extends FieldValues>({fields, validator, className, classNames, isLoading, onSubmit, onClear, submitText, children}: FormProps<T>) => {
     const methods = useForm<T>();
     
     const formValues = methods.watch();
@@ -38,8 +38,8 @@ const Form = <T extends FieldValues>({fields, validator, className, classNames, 
                 {typeof children === 'function' 
                     ? children(methods.handleSubmit(formSubmit), clear)
                     : typeof children !=='undefined' ? children : <div className="form-action-buttons">
-                            <button className={cn(classNames?.submitButton)} type="submit">
-                                Submit
+                            <button className={cn(classNames?.submitButton || 'btn btn-primary')} type="submit">
+                                {submitText || 'Submit'}
                             </button>
                             {!isLoading && !isFormClear() && <>
                                 <button className={cn(classNames?.clearButton)} onClick={clear}>
