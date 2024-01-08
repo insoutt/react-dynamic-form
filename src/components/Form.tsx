@@ -4,7 +4,7 @@ import { FormProps } from '../utils/types';
 import { cn } from '../utils/utils';
 import { SimpleFormContext } from "../contexts/simple-form-context";
 
-const Form = <T extends FieldValues>({fields, validator, className, classNames, isLoading, onSubmit, onClear, submitText, children}: FormProps<T>) => {
+const Form = <T extends FieldValues>({fields, validator, className, classNames, isLoading, onSubmit, onClear, submitText, hideClearButton, children}: FormProps<T>) => {
     const methods = useForm<T>();
     
     const formValues = methods.watch();
@@ -41,7 +41,7 @@ const Form = <T extends FieldValues>({fields, validator, className, classNames, 
                             <button className={cn(classNames?.submitButton || 'btn btn-primary')} type="submit">
                                 {submitText || 'Submit'}
                             </button>
-                            {!isLoading && !isFormClear() && <>
+                            {!hideClearButton && !isLoading && !isFormClear() && <>
                                 <button className={cn(classNames?.clearButton)} onClick={clear}>
                                     Clear
                                 </button>
