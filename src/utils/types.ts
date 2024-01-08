@@ -8,10 +8,9 @@ export interface FormProps<T extends FieldValues> {
     isLoading?: boolean;
     classNames?: FormClassNames;
     validator?: Validator 
-    submitButton?: (submit: () => void) => React.ReactNode
-    clearButton?: (reset: () => void) => React.ReactNode
     onSubmit?: (values: T) => void
-    onClear?: () => void
+    onClear?: () => void;
+    children?: React.ReactNode | ((submit: () => void, clear: () => void) => React.ReactElement)
 }
 
 interface FormClassNames{

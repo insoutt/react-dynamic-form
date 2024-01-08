@@ -4,7 +4,7 @@ import { FormProps } from '../utils/types';
 import { cn } from '../utils/utils';
 import { SimpleFormContext } from "../contexts/simple-form-context";
 
-const Form = <T extends FieldValues>({fields, validator, className, classNames, clearButton, submitButton, isLoading, onSubmit, onClear}: FormProps<T>) => {
+const Form = <T extends FieldValues>({fields, validator, className, classNames, isLoading, onSubmit, onClear, children}: FormProps<T>) => {
     const methods = useForm<T>();
     
     const formValues = methods.watch();
@@ -34,14 +34,19 @@ const Form = <T extends FieldValues>({fields, validator, className, classNames, 
                 {fields.map(field => (
                     <FormField<T> key={field.name} {...field}/>
                 ))}
-                <div className="form-action-buttons">
-                    {submitButton ? submitButton(methods.handleSubmit(formSubmit))  : <button className={cn(classNames?.submitButton)} type="submit">
-                        Submit
-                    </button>}
-                    {!isLoading && !isFormClear() && <>{clearButton ? clearButton(clear)  : <button className={cn(classNames?.clearButton)} onClick={clear}>
-                        Clear
-                    </button>}</>}
-                </div>
+                
+                {typeof children === 'function' 
+                    ? children(methods.handleSubmit(formSubmit), clear)
+                    : typeof children !=='undefined' ? children : <div className="form-action-buttons">
+                            <button className={cn(classNames?.submitButton)} type="submit">
+                                Submit
+                            </button>
+                            {!isLoading && !isFormClear() && <>
+                                <button className={cn(classNames?.clearButton)} onClick={clear}>
+                                    Clear
+                                </button>
+                            </>}
+                        </div>}
             </form>
         </FormProvider>
         </SimpleFormContext.Provider>
