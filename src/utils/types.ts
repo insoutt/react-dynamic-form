@@ -41,6 +41,7 @@ interface FieldBaseAttributes<T extends FieldValues> {
     className?: string;
     groupClassName?: string;
     labelClassName?: string;
+    children?: React.ReactElement;
     validation?: string | FieldValidator
 }
 

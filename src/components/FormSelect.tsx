@@ -4,7 +4,7 @@ import { SelectProps } from "../utils/types";
 import { useContext } from "react";
 import { SimpleFormContext } from "../contexts/simple-form-context";
 
-const FormSelect = <T extends FieldValues>({ label, name, options, validation, props, labelClassName, groupClassName, className, renderFields }: SelectProps<T>): JSX.Element => {
+const FormSelect = <T extends FieldValues>({ label, name, options, validation, props, labelClassName, groupClassName, className, renderFields, children }: SelectProps<T>): JSX.Element => {
     const { register, watch, formState: { errors } } = useFormContext();
     const {isLoading, validator} = useContext(SimpleFormContext);
     const selectedValue = watch(name);
@@ -35,6 +35,7 @@ const FormSelect = <T extends FieldValues>({ label, name, options, validation, p
                 <option value="">N/A</option>
                 {options.map(option => <option key={option.value} value={option.value}>{option.text}</option>)}
             </select>
+            {children}
         </div>
         
         {renderInputs()}

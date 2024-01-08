@@ -28,7 +28,9 @@ const FormField = <T extends FieldValues>(props: FieldProps<T>): JSX.Element => 
                         groupClassName={cn(props.classNames?.group)}
                         labelClassName={cn(props.classNames?.label)}
                         renderFields={(fieldProps) => <FormField<T> key={fieldProps.name} {...fieldProps}/>}
-                    />
+                    >
+                        {renderChild()}
+                    </FormSelect>
                 );
             default:
                 return (
@@ -38,7 +40,9 @@ const FormField = <T extends FieldValues>(props: FieldProps<T>): JSX.Element => 
                         className={cn(props.classNames?.input || props.classNames?.field)} 
                         groupClassName={cn(props.classNames?.group)}
                         labelClassName={cn(props.classNames?.label)}
-                    />
+                    >
+                        {renderChild()}
+                    </FormInput>
                 );
         }
     }
@@ -48,10 +52,15 @@ const FormField = <T extends FieldValues>(props: FieldProps<T>): JSX.Element => 
         return (typeof message === 'string') ? message : null;
     }
 
+    const renderChild = () => {
+        return (<>
+            {getErrorMessage() !== null && <p role="alert" className="form-error">{getErrorMessage()}</p>}
+            {props.helpText && <span className="form-help-text">{props.helpText}</span>}
+        </>);
+    }
+
     return (<>
         {renderField()}
-        {getErrorMessage() !== null && <p role="alert" className="form-error">{getErrorMessage()}</p>}
-        {props.helpText && <span className="form-help-text">{props.helpText}</span>}
     </>)
 };
   
