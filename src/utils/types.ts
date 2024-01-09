@@ -35,7 +35,7 @@ type FormBaseFieldProps = {
 // End Form
 
 // FormField
-export type FieldValidator = (value: string | number) => boolean | string | Promise<boolean | string>;
+export type FieldValidator = (value: string | number) => (boolean | string | Promise<boolean | string>);
 
 interface FieldBaseAttributes<T extends FieldValues> {
     label?: string;

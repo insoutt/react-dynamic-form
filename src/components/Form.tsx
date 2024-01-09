@@ -5,9 +5,14 @@ import { cn } from '../utils/utils';
 import { SimpleFormContext } from "../contexts/simple-form-context";
 
 const Form = <T extends FieldValues>({fields, validator, beforeSubmit, afterSubmit, className, classNames, isLoading, onSubmit, onClear, submitText, clearText, loadingText, hideClearButton, children}: FormProps<T>) => {
-    const methods = useForm<T>();
+    const methods = useForm<T>({
+        mode: 'onSubmit',
+    });
     
     const formValues = methods.watch();
+    const {isSubmitting} = methods.formState;
+    const isFormBusy = isLoading || isSubmitting;
+
 
     const isFormClear = () => {
         return Object.values(formValues).every(value => !value);
@@ -35,7 +40,7 @@ const Form = <T extends FieldValues>({fields, validator, beforeSubmit, afterSubm
 
     return (
         <SimpleFormContext.Provider value={{
-            isLoading: !!isLoading,
+            isLoading: !!isFormBusy,
             validator,
         }}>
             <FormProvider {...methods}>
@@ -47,10 +52,10 @@ const Form = <T extends FieldValues>({fields, validator, beforeSubmit, afterSubm
                 {typeof children === 'function' 
                     ? children(methods.handleSubmit(formSubmit), clear)
                     : typeof children !=='undefined' ? children : <div className="form-action-buttons">
-                            <button className={cn(classNames?.submitButton || 'btn btn-primary')} type="submit" disabled={isLoading}>
-                                {isLoading ? loadingText : submitText || 'Submit'}
+                            <button className={cn(classNames?.submitButton || 'btn btn-primary')} type="submit" disabled={isFormBusy}>
+                                {isFormBusy ? loadingText : submitText || 'Submit'}
                             </button>
-                            {!hideClearButton && !isLoading && !isFormClear() && <>
+                            {!hideClearButton && !isFormBusy && !isFormClear() && <>
                                 <button className={cn(classNames?.clearButton)} onClick={clear}>
                                     {clearText || 'Clear'}
                                 </button>
