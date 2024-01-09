@@ -10,7 +10,9 @@ export interface FormProps<T extends FieldValues> {
     validator?: Validator 
     onSubmit?: (values: T) => void
     onClear?: () => void;
+    loadingText?: string
     submitText?: string
+    clearText?: string
     hideClearButton?: boolean
     beforeSubmit?: (values: T) => T | false
     afterSubmit?: (values: T) => boolean
