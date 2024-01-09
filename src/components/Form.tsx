@@ -4,7 +4,7 @@ import { FormProps } from '../utils/types';
 import { cn } from '../utils/utils';
 import { SimpleFormContext } from "../contexts/simple-form-context";
 
-const Form = <T extends FieldValues>({fields, validator, className, classNames, isLoading, onSubmit, onClear, submitText, hideClearButton, children}: FormProps<T>) => {
+const Form = <T extends FieldValues>({fields, validator, beforeSubmit, afterSubmit, className, classNames, isLoading, onSubmit, onClear, submitText, hideClearButton, children}: FormProps<T>) => {
     const methods = useForm<T>();
     
     const formValues = methods.watch();
@@ -16,7 +16,16 @@ const Form = <T extends FieldValues>({fields, validator, className, classNames, 
     const formSubmit: SubmitHandler<T> = (values: T) => {
         console.log(`Submitted`);
         console.log(values);
+
+        if(typeof beforeSubmit === 'function' && !beforeSubmit(values)) {
+            const before = beforeSubmit(values);
+            if(!before) {
+                return;
+            }
+            values = before
+        }
         onSubmit?.(values);
+        afterSubmit?.(values);
     };
 
     const clear = () => {
