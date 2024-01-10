@@ -4,10 +4,8 @@ import { FormProps } from '../utils/types';
 import { cn } from '../utils/utils';
 import { SimpleFormContext } from "../contexts/simple-form-context";
 
-const Form = <T extends FieldValues>({fields, validator, beforeSubmit, afterSubmit, className, classNames, isLoading, onSubmit, onClear, submitText, clearText, loadingText, hideClearButton, children}: FormProps<T>) => {
-    const methods = useForm<T>({
-        mode: 'onSubmit',
-    });
+const Form = <T extends FieldValues>({fields, validator, beforeSubmit, afterSubmit, className, classNames, isLoading, onSubmit, onClear, submitText, clearText, loadingText, hideClearButton, validateOnSubmit, children}: FormProps<T>) => {
+    const methods = useForm<T>();
     
     const formValues = methods.watch();
     const {isSubmitting} = methods.formState;
@@ -18,7 +16,7 @@ const Form = <T extends FieldValues>({fields, validator, beforeSubmit, afterSubm
         return Object.values(formValues).every(value => !value);
     };
 
-    const formSubmit: SubmitHandler<T> = (values: T) => {
+    const formSubmit: SubmitHandler<T> = async (values: T) => {
         console.log(`Submitted`);
         console.log(values);
 
@@ -29,6 +27,15 @@ const Form = <T extends FieldValues>({fields, validator, beforeSubmit, afterSubm
             }
             values = before
         }
+
+        if(validateOnSubmit) {
+            // Call validation when validateOnSubmit is true
+            const isValid = await methods.trigger();
+            if (!isValid) {
+                return;
+            }
+        }
+
         onSubmit?.(values);
         afterSubmit?.(values);
     };
@@ -41,6 +48,7 @@ const Form = <T extends FieldValues>({fields, validator, beforeSubmit, afterSubm
     return (
         <SimpleFormContext.Provider value={{
             isLoading: !!isFormBusy,
+            validateOnSubmit: !!validateOnSubmit,
             validator,
         }}>
             <FormProvider {...methods}>

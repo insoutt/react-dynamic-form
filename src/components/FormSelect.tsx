@@ -1,26 +1,21 @@
 import { useFormContext, FieldValues } from "react-hook-form"
-import { cn, getFieldClassname, getValidation } from '../utils/utils';
+import { cn, getFieldClassname, parseValidation } from '../utils/utils';
 import { SelectProps } from "../utils/types";
 import { useContext, useState } from "react";
 import { SimpleFormContext } from "../contexts/simple-form-context";
 
 const FormSelect = <T extends FieldValues>({ label, name, options, validation, props, labelClassName, groupClassName, className, renderFields, children }: SelectProps<T>): JSX.Element => {
     const { register, watch, formState } = useFormContext();
-    const {isLoading, validator} = useContext(SimpleFormContext);
+    const {isLoading, validator, validateOnSubmit} = useContext(SimpleFormContext);
     const [isValidating, setValidating] = useState(false);
     const selectedValue = watch(name);
-    const validate = (value: string | number) => {
-        if(typeof value === 'undefined') return;
-
-        const fn = getValidation(validation, validator);
-        
-        if(typeof fn === 'undefined') {
-            return true;
-        }
-
+    
+    const validate = async (value?: string | number) => {
+        if(!value) return;
         setValidating(true);
-        return Promise.resolve(fn(value))
-        .finally(() => setValidating(false));
+        const validationResponse = await parseValidation(value, formState, validateOnSubmit, validation, validator);
+        setValidating(false);
+        return validationResponse;
     };
 
     const renderInputs = () => {
@@ -36,7 +31,13 @@ const FormSelect = <T extends FieldValues>({ label, name, options, validation, p
             <label className={labelClassName || 'form-label'} htmlFor={name}>{label}</label>
             <select id={name} 
                 disabled={isLoading || formState.isSubmitting}
-                className={getFieldClassname(name, formState, isValidating, className)} 
+                className={getFieldClassname(name, {
+                        formState, 
+                        isValidating,
+                        validateOnSubmit, 
+                        className
+                    })
+                } 
                 {...register(name, {required: {
                     value: true,
                     message: 'Obligatorio'

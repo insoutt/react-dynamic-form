@@ -14,6 +14,7 @@ export interface FormProps<T extends FieldValues> {
     submitText?: string
     clearText?: string
     hideClearButton?: boolean
+    validateOnSubmit?: boolean
     beforeSubmit?: (values: T) => T | false
     afterSubmit?: (values: T) => boolean
     children?: React.ReactNode | ((submit: () => void, clear: () => void) => React.ReactElement)
