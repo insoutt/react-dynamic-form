@@ -2,21 +2,26 @@ import { FieldValues, Path } from "react-hook-form";
 
 // Form
 export type Validator = Record<string, FieldValidator>;
+export type OnSubmit<T> = (values: T) => void;
+export type OnClear = () => void;
+export type BeforeSubmit<T> = (values: T) => Promise<T | boolean>
+export type AfterSubmit<T> = (values: T) => void
+
 export interface FormProps<T extends FieldValues> {
     fields: FieldProps<T>[];
     className?: string;
     isLoading?: boolean;
     classNames?: FormClassNames;
     validator?: Validator 
-    onSubmit?: (values: T) => void
-    onClear?: () => void;
+    onSubmit?: OnSubmit<T>
+    onClear?: OnClear
     loadingText?: string
     submitText?: string
     clearText?: string
     hideClearButton?: boolean
     validateOnSubmit?: boolean
-    beforeSubmit?: (values: T) => Promise<T | boolean>
-    afterSubmit?: (values: T) => boolean
+    beforeSubmit?: BeforeSubmit<T>
+    afterSubmit?: AfterSubmit<T>
     children?: React.ReactNode | ((submit: () => void, clear: () => void) => React.ReactElement)
 }
 
