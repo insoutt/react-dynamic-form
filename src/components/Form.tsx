@@ -17,15 +17,20 @@ const Form = <T extends FieldValues>({fields, validator, beforeSubmit, afterSubm
     };
 
     const formSubmit: SubmitHandler<T> = async (values: T) => {
-        console.log(`Submitted`);
-        console.log(values);
-
-        if(typeof beforeSubmit === 'function' && !beforeSubmit(values)) {
-            const before = beforeSubmit(values);
-            if(!before) {
-                return;
+        if(typeof beforeSubmit === 'function') {
+            try {
+                const before = await beforeSubmit(values);
+                if(before === false) {
+                    return;
+                } else if(before !== true) {
+                    values = before;
+                }
+            } catch (error) {
+                if(error instanceof Error) {
+                    throw new Error('Before submit fails, reason: ' + error?.message)
+                }
+                throw new Error('beforeSubmit fails')
             }
-            values = before
         }
 
         if(validateOnSubmit) {
@@ -36,8 +41,9 @@ const Form = <T extends FieldValues>({fields, validator, beforeSubmit, afterSubm
             }
         }
 
-        onSubmit?.(values);
-        afterSubmit?.(values);
+        Promise.resolve(onSubmit?.(values))
+            .then(() => afterSubmit?.(values));
+    
     };
 
     const clear = () => {
