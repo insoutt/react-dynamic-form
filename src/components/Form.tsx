@@ -36,6 +36,7 @@ const Form = <T extends FieldValues>({fields, validator, beforeSubmit, afterSubm
         if(validateOnSubmit) {
             // Call validation when validateOnSubmit is true
             const isValid = await methods.trigger();
+            
             if (!isValid) {
                 return;
             }

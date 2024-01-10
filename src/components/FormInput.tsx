@@ -10,8 +10,7 @@ const FormInput = <T extends FieldValues>({ label, name, type, className, valida
     const {isLoading, validator, validateOnSubmit} = useContext(SimpleFormContext);
     const [isValidating, setValidating] = useState(false);
    
-    const validate = async (value?: string | number) => {
-        if(!value) return;
+    const validate = async (value: string | number) => {
         setValidating(true);
         const validationResponse = await parseValidation(value, formState, validateOnSubmit, validation, validator);
         setValidating(false);
