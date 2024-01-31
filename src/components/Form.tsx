@@ -6,11 +6,10 @@ import { SimpleFormContext } from "../contexts/simple-form-context";
 
 const Form = <T extends FieldValues>({fields, validator, beforeSubmit, afterSubmit, className, classNames, isLoading, onSubmit, onClear, submitText, clearText, loadingText, hideClearButton, validateOnSubmit, children}: FormProps<T>) => {
     const methods = useForm<T>();
-    
+
     const formValues = methods.watch();
     const {isSubmitting} = methods.formState;
     const isFormBusy = isLoading || isSubmitting;
-
 
     const isFormClear = () => {
         return Object.values(formValues).every(value => !value);
@@ -36,7 +35,7 @@ const Form = <T extends FieldValues>({fields, validator, beforeSubmit, afterSubm
         if(validateOnSubmit) {
             // Call validation when validateOnSubmit is true
             const isValid = await methods.trigger();
-            
+
             if (!isValid) {
                 return;
             }
@@ -44,7 +43,7 @@ const Form = <T extends FieldValues>({fields, validator, beforeSubmit, afterSubm
 
         Promise.resolve(onSubmit?.(values))
             .then(() => afterSubmit?.(values));
-    
+
     };
 
     const clear = () => {
@@ -57,14 +56,15 @@ const Form = <T extends FieldValues>({fields, validator, beforeSubmit, afterSubm
             isLoading: !!isFormBusy,
             validateOnSubmit: !!validateOnSubmit,
             validator,
+            classNames,
         }}>
             <FormProvider {...methods}>
             <form onSubmit={methods.handleSubmit(formSubmit)} className={className}>
                 {fields.map(field => (
                     <FormField<T> key={field.name} {...field}/>
                 ))}
-                
-                {typeof children === 'function' 
+
+                {typeof children === 'function'
                     ? children(methods.handleSubmit(formSubmit), clear)
                     : typeof children !=='undefined' ? children : <div className="form-action-buttons">
                             <button className={cn(classNames?.submitButton || 'btn btn-primary')} type="submit" disabled={isFormBusy}>
@@ -81,5 +81,5 @@ const Form = <T extends FieldValues>({fields, validator, beforeSubmit, afterSubm
         </SimpleFormContext.Provider>
     )
 }
- 
+
 export default Form;

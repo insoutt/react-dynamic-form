@@ -12,7 +12,7 @@ export interface FormProps<T extends FieldValues> {
     className?: string;
     isLoading?: boolean;
     classNames?: FormClassNames;
-    validator?: Validator 
+    validator?: Validator
     onSubmit?: OnSubmit<T>
     onClear?: OnClear
     loadingText?: string
@@ -25,7 +25,7 @@ export interface FormProps<T extends FieldValues> {
     children?: React.ReactNode | ((submit: () => void, clear: () => void) => React.ReactElement)
 }
 
-interface FormClassNames{
+export interface FormClassNames{
     select?: string
     input?: string
     field?: string
@@ -36,7 +36,6 @@ interface FormClassNames{
 }
 
 type FormBaseFieldProps = {
-    classNames?: FormClassNames;
 };
 // End Form
 
@@ -83,7 +82,7 @@ export type SelectProps<T extends FieldValues> = {
     renderFields?: (field: FieldProps<T>) => React.ReactNode
 } & FieldBaseAttributes<T>;
 
-type SelectOption<T extends FieldValues> = {
+export type SelectOption<T extends FieldValues> = {
     value: string | number;
     text: string;
     fields?: FieldProps<T>[];
