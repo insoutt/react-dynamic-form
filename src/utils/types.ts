@@ -1,4 +1,4 @@
-import { FieldValues, Path } from "react-hook-form";
+import { DefaultValues, FieldValues, Path } from "react-hook-form";
 
 // Form
 export type Validator = Record<string, FieldValidator>;
@@ -22,6 +22,7 @@ export interface FormProps<T extends FieldValues> {
     validateOnSubmit?: boolean
     beforeSubmit?: BeforeSubmit<T>
     afterSubmit?: AfterSubmit<T>
+    defaultValues?: DefaultValues<T>;
     children?: React.ReactNode | ((submit: () => void, clear: () => void) => React.ReactElement)
 }
 
@@ -56,7 +57,6 @@ interface FieldBaseAttributes<T extends FieldValues> {
 
 interface FieldBaseProps {
     placeholder?: string
-    defaultValue?: string
     disabled?: boolean
 }
 
