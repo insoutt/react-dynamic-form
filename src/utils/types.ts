@@ -53,6 +53,10 @@ interface FieldBaseAttributes<T extends FieldValues> {
     labelClassName?: string;
     children?: React.ReactElement;
     validation?: string | FieldValidator
+    preprocessor?: (value: string | number, selection: {
+        from: number | null
+        end: number | null
+    }) => string | number
 }
 
 interface FieldBaseProps {

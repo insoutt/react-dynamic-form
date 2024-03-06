@@ -1,12 +1,12 @@
 import { useFormContext, FieldValues } from "react-hook-form"
 import { cn, getFieldClassname, parseValidation } from "../utils/utils";
 import { InputProps } from "../utils/types";
-import { useContext, useState } from "react";
+import { ChangeEvent, useContext, useState } from "react";
 import { SimpleFormContext } from "../contexts/simple-form-context";
 
 
-const FormInput = <T extends FieldValues>({ label, name, type, className, validation, props, groupClassName, labelClassName, children }: InputProps<T>): JSX.Element => {
-    const { register, formState } = useFormContext();
+const FormInput = <T extends FieldValues>({ label, name, type, className, validation, props, groupClassName, labelClassName, children, preprocessor }: InputProps<T>): JSX.Element => {
+    const { register, formState, setValue } = useFormContext();
     const {isLoading, validator, validateOnSubmit} = useContext(SimpleFormContext);
     const [isValidating, setValidating] = useState(false);
 
@@ -17,11 +17,26 @@ const FormInput = <T extends FieldValues>({ label, name, type, className, valida
         return validationResponse;
     };
 
+    const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = event.target;
+        let auxValue: string | number = value;
+
+        if(typeof preprocessor === 'function') {
+            auxValue = preprocessor(value, {
+                from: event.target.selectionStart,
+                end: event.target.selectionEnd,
+            });
+        }
+        setValue(name, auxValue);
+    };
+
     return <div className={cn(groupClassName || 'form-group')}>
         {label && <label className={labelClassName || 'form-label'} htmlFor={name}>{label}</label>}
         <input id={name}
             type={type}
             disabled={isLoading || formState.isSubmitting}
+            {...register(name, { validate })}
+            onChange={handleInputChange}
             className={getFieldClassname(name, {
                     formState,
                     isValidating,
@@ -29,7 +44,6 @@ const FormInput = <T extends FieldValues>({ label, name, type, className, valida
                     className
                 })
             }
-            {...register(name, { validate })}
             {...props}
         />
         {children}
