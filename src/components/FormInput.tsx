@@ -6,7 +6,7 @@ import { SimpleFormContext } from "../contexts/simple-form-context";
 
 
 const FormInput = <T extends FieldValues>({ label, name, type, className, validation, props, groupClassName, labelClassName, children, preprocessor }: InputProps<T>): JSX.Element => {
-    const { register, formState, setValue } = useFormContext();
+    const { register, formState, setValue, trigger } = useFormContext();
     const {isLoading, validator, validateOnSubmit} = useContext(SimpleFormContext);
     const [isValidating, setValidating] = useState(false);
 
@@ -17,7 +17,7 @@ const FormInput = <T extends FieldValues>({ label, name, type, className, valida
         return validationResponse;
     };
 
-    const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const handleInputChange = async (event: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
         let auxValue: string | number = value;
 
@@ -28,6 +28,9 @@ const FormInput = <T extends FieldValues>({ label, name, type, className, valida
             });
         }
         setValue(name, auxValue);
+        if(! validateOnSubmit) {
+            await trigger(name);
+        }
     };
 
     return <div className={cn(groupClassName || 'form-group')}>
