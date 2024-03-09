@@ -14,7 +14,7 @@ export async function parseValidation<T extends FieldValues>(value: string | num
     if(validateOnSubmit && !formState.isSubmitting) return true;
 
     const fn = getValidation(validation, validator);
-    
+
     if(typeof fn === 'undefined') {
         return true;
     }
@@ -31,7 +31,8 @@ function getValidation(validation?: string | FieldValidator, validator?: Validat
     }
     if(typeof validation === 'string') {
         if(typeof validator[validation] === 'undefined') {
-            throw new Error(`Validation '${validation}' does not exists in form validator object`)
+            console.error(`Validation '${validation}' does not exists in form validator object`);
+            return;
         }
 
         return validator[validation];
@@ -40,7 +41,7 @@ function getValidation(validation?: string | FieldValidator, validator?: Validat
 
 export function getFieldClassname<T extends FieldValues>(name: Path<T>, options: {formState: FormState<T>, isValidating: boolean, validateOnSubmit: boolean, className?: string}) {
     const classNameAux = options.className || 'form-control';
-    
+
     if(options.validateOnSubmit) {
         if(!options.formState.isSubmitting) {
             return cn(
@@ -49,13 +50,13 @@ export function getFieldClassname<T extends FieldValues>(name: Path<T>, options:
             );
         }
         return cn(
-            classNameAux, 
+            classNameAux,
             options.formState.errors[name] && `${classNameAux}-error`,
             options.isValidating ? `${classNameAux}-validating` : '',
         );
     }
     return cn(
-        classNameAux, 
+        classNameAux,
         options.formState.errors[name] && `${classNameAux}-error`,
         options.isValidating ? `${classNameAux}-validating` : '',
         options.formState.isValid ? `${classNameAux}-valid` : '',
