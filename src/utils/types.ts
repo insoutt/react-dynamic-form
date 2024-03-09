@@ -6,6 +6,7 @@ export type OnSubmit<T> = (values: T) => void;
 export type OnClear = () => void;
 export type BeforeSubmit<T> = (values: T) => Promise<T | boolean>
 export type AfterSubmit<T> = (values: T) => void
+export type Value = string | number;
 
 export interface FormProps<T extends FieldValues> {
     fields: FieldProps<T>[];
@@ -41,7 +42,12 @@ type FormBaseFieldProps = {
 // End Form
 
 // FormField
-export type FieldValidator = (value: string | number) => (boolean | string | Promise<boolean | string>);
+export type FieldValidator = (value: Value) => (boolean | string | Promise<boolean | string>);
+
+export type Selection = {
+    from: number | null
+    end: number | null
+}
 
 interface FieldBaseAttributes<T extends FieldValues> {
     label?: string;
@@ -53,10 +59,7 @@ interface FieldBaseAttributes<T extends FieldValues> {
     labelClassName?: string;
     children?: React.ReactElement;
     validation?: string | FieldValidator
-    preprocessor?: (value: string | number, selection: {
-        from: number | null
-        end: number | null
-    }) => string | number
+    preprocessor?: (value: Value, selection: Selection) => Value
 }
 
 interface FieldBaseProps {
@@ -87,7 +90,7 @@ export type SelectProps<T extends FieldValues> = {
 } & FieldBaseAttributes<T>;
 
 export type SelectOption<T extends FieldValues> = {
-    value: string | number;
+    value: Value;
     text: string;
     fields?: FieldProps<T>[];
 }
