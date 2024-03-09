@@ -16,6 +16,7 @@ export interface FormProps<T extends FieldValues> {
     validator?: Validator
     onSubmit?: OnSubmit<T>
     onClear?: OnClear
+    preprocessors?: Record<string, Preprocessor>
     loadingText?: string
     submitText?: string
     clearText?: string
@@ -43,6 +44,7 @@ type FormBaseFieldProps = {
 
 // FormField
 export type FieldValidator = (value: Value) => (boolean | string | Promise<boolean | string>);
+export type Preprocessor = (value: Value, selection: Selection) => Value;
 
 export type Selection = {
     from: number | null
@@ -59,7 +61,7 @@ interface FieldBaseAttributes<T extends FieldValues> {
     labelClassName?: string;
     children?: React.ReactElement;
     validation?: string | FieldValidator
-    preprocessor?: (value: Value, selection: Selection) => Value
+    preprocessor?: Preprocessor
 }
 
 interface FieldBaseProps {

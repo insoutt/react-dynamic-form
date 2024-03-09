@@ -7,7 +7,7 @@ import { SimpleFormContext } from "../contexts/simple-form-context";
 
 const FormInput = <T extends FieldValues>({ label, name, type, className, validation, props, groupClassName, labelClassName, children, preprocessor }: InputProps<T>): JSX.Element => {
     const { register, formState, setValue, trigger } = useFormContext();
-    const {isLoading, validator, validateOnSubmit} = useContext(SimpleFormContext);
+    const {isLoading, validator, validateOnSubmit, preprocessors} = useContext(SimpleFormContext);
     const [isValidating, setValidating] = useState(false);
 
     const validate = async (value: string | number) => {
@@ -26,7 +26,13 @@ const FormInput = <T extends FieldValues>({ label, name, type, className, valida
                 from: event.target.selectionStart,
                 end: event.target.selectionEnd,
             });
+        } else if(typeof preprocessors !== 'undefined' && typeof preprocessors[name] === 'function') {
+            auxValue = preprocessors[name](value, {
+                from: event.target.selectionStart,
+                end: event.target.selectionEnd,
+            })
         }
+
         setValue(name, auxValue);
         if(! validateOnSubmit) {
             await trigger(name);
