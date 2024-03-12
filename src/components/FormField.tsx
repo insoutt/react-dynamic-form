@@ -14,7 +14,6 @@ const FormField = <T extends FieldValues>(props: FieldProps<T>): JSX.Element => 
 
     useEffect(() => {
         return () => {
-            console.log('UnMount', props.label);
             unregister(props.label);
         }
     }, []);
